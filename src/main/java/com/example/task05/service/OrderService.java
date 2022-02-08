@@ -32,7 +32,6 @@ public class OrderService {
         this.restaurantRepository = restaurantRepository;
         this.foodRepository = foodRepository;
         this.orderFoodsRepository = orderFoodsRepository;
-
         this.orderRepository = orderRepository;
 
     }
@@ -57,17 +56,18 @@ public class OrderService {
                     .orElseThrow(() -> new NullPointerException("해당 음식이 없습니다."));
 
 
-            OrderFoods orderFoods = new OrderFoods(food,food.getName(),quantity,food.getPrice()*quantity);
+            OrderFoods orderFoods = new OrderFoods(food,quantity);
             orderFoodsRepository.save(orderFoods);
-
-
-            OrderFoodsResponseDto orderFoodsResponseDto = new OrderFoodsResponseDto(orderFoods);
-            orderFoodsResponseDtoList.add(orderFoodsResponseDto);
 
             totalPrice+=food.getPrice()*quantity;
             orderFoodsList.add(orderFoods);
-            System.out.println(orderFoodsResponseDtoList);
-            System.out.println(orderFoodsList);
+
+            OrderFoodsResponseDto orderFoodsResponseDto = new OrderFoodsResponseDto(
+                    orderFoods.getFood().getName(),
+                    quantity,
+                    orderFoods.getFood().getPrice()*quantity);
+
+            orderFoodsResponseDtoList.add(orderFoodsResponseDto);
 
         }
         if (totalPrice<restaurant.getMinOrderPrice()){
@@ -79,6 +79,29 @@ public class OrderService {
         orderRepository.save(orders);
         return new OrdersResponseDto(orders,orderFoodsResponseDtoList,deliveryFee);
 
+    }
+
+    public  List<OrdersResponseDto> showOrders(){
+        List<OrderFoodsResponseDto> ordersResponse = new ArrayList<>();
+        List<OrdersResponseDto> orderFoodsResponseDtoList =new ArrayList<>();
+        List<Orders> ordersList = orderRepository.findAll();
+        for (Orders orders:ordersList){
+            int deliveryFee = orders.getDeliveryFee();
+            String restaurantName = orders.getRestaurantName();
+            int totalPrice= orders.getTotalPrice();
+            List<OrderFoods> orderFoodsList  = orderFoodsRepository.findOlderFoodsByOrders(orders);
+            for (OrderFoods orderFoods:orderFoodsList){
+                OrderFoodsResponseDto orderFoodsResponseDto = new OrderFoodsResponseDto(
+                        orderFoods.getFood().getName(),
+                        orderFoods.getQuantity(),
+                        orderFoods.getFood().getPrice()*orderFoods.getQuantity());
+                ordersResponse.add(orderFoodsResponseDto);
+            }
+            OrdersResponseDto ordersResponseDto =  new OrdersResponseDto(orders,ordersResponse,deliveryFee);
+            orderFoodsResponseDtoList.add(ordersResponseDto);
+
+        }
+        return orderFoodsResponseDtoList;
     }
 
 

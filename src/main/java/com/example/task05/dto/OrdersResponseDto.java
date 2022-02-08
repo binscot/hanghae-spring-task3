@@ -2,9 +2,11 @@ package com.example.task05.dto;
 
 import com.example.task05.model.Orders;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Setter
 @Getter
 public class OrdersResponseDto {
 
@@ -19,4 +21,6 @@ public class OrdersResponseDto {
         this.deliveryFee=deliveryFee;
         this.totalPrice=orders.getTotalPrice();
     }
+
+
 }

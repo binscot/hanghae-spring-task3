@@ -20,40 +20,15 @@ public class OrderFoods {
     private Food food;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private int quantity;
-
-    @Column(nullable = false)
-    private int price;
 
     @ManyToOne
     private Orders orders;
 
 
 
-//    public OrderFoods(OrderFoodsRequestDto orderFoodsRequestDto){
-//        this.foodName = orderFoodsRequestDto.getName();
-//        this.quantity = orderFoodsRequestDto.getQuantity();
-//        this.price = orderFoodsRequestDto.getPrice();
-//    }
-//
-//    @ManyToOne
-//    private Order order;
-
-
-    //    public OrderFoods(int price, int quantity){
-//        this.foodName=food.getName();
-//        this.quantity=quantity;
-//        this.price = price;
-//
-//    }
-//
-    public OrderFoods(Food food, String name, int quantity, int price) {
+    public OrderFoods(Food food, int quantity) {
         this.food = food;
-        this.name = name;
         this.quantity = quantity;
-        this.price = price;
     }
 }

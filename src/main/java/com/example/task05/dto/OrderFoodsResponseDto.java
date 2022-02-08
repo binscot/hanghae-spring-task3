@@ -1,6 +1,5 @@
 package com.example.task05.dto;
 
-import com.example.task05.model.OrderFoods;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +10,10 @@ public class OrderFoodsResponseDto {
     private int quantity;
     private int price;
 
-    public OrderFoodsResponseDto(OrderFoods orderFoods) {
-        this.name=orderFoods.getName();
-        this.quantity=orderFoods.getQuantity();
-        this.price=orderFoods.getPrice();
+
+    public OrderFoodsResponseDto(String name, int quantity, int price) {
+        this.name=name;
+        this.quantity=quantity;
+        this.price=price;
     }
 }

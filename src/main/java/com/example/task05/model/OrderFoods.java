@@ -16,7 +16,7 @@ public class OrderFoods {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Food food;
 
     @Column(nullable = false)
@@ -24,7 +24,6 @@ public class OrderFoods {
 
     @ManyToOne
     private Orders orders;
-
 
 
     public OrderFoods(Food food, int quantity) {

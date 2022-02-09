@@ -11,6 +11,5 @@ import java.util.List;
 public class OrderRequestDto {
     public Long restaurantId;
     private List<OrderFoods> foods;
-
-
+    private LocationDto locationDto;
 }

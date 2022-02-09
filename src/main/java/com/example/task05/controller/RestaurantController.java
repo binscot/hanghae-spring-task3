@@ -1,5 +1,6 @@
 package com.example.task05.controller;
 
+import com.example.task05.dto.LocationDto;
 import com.example.task05.dto.RestaurantRequestDto;
 import com.example.task05.model.Restaurant;
 import com.example.task05.repository.RestaurantRepository;
@@ -28,5 +29,8 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants")
-    public List<Restaurant> getRestaurant() {return restaurantRepository.findAll();}
+    public List<Restaurant> getRestaurant(@RequestBody LocationDto locationDto) {
+        List<Restaurant> restaurants = restaurantService.showRestaurant(locationDto);
+        return restaurants;
+    }
 }

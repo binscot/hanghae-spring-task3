@@ -5,10 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class RestaurantRequestDto {
-    private String name;
-    private int minOrderPrice;
-    private int deliveryFee;
+public class LocationDto {
     private int x;
     private int y;
 }

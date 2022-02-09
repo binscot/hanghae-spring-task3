@@ -21,6 +21,4 @@ public class OrdersResponseDto {
         this.deliveryFee=deliveryFee;
         this.totalPrice=orders.getTotalPrice();
     }
-
-
 }

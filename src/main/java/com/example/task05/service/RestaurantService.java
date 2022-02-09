@@ -42,6 +42,7 @@ public class RestaurantService {
 
     }
 
+    //거리별 음식점 조회
     @Transactional
     public List<Restaurant> showRestaurant(LocationDto locationDto) {
         //보여줄 레스토랑 리스트
@@ -49,32 +50,28 @@ public class RestaurantService {
         //거리를 비교해줄 레스토랑 리스트
         List<Restaurant> restaurantList = restaurantRepository.findAll();
         for (Restaurant restaurant : restaurantList){
-            int x = restaurant.getX();
-            System.out.println("레스토랑 x:"+x);
-            int y = restaurant.getY();
-            System.out.println("레스토랑 y:"+y);
-            int userX = locationDto.getX();
-            System.out.println("user x:"+userX);
-            int userY = locationDto.getY();
-            System.out.println("user y:"+userY);
-            int xx = x-userX;
-            int yy = y-userY;
-            if (xx<0){
-                xx *= -1;
-            }
-            System.out.println(xx);
-            if (yy<0){
-                yy *= -1;
-            }
-            System.out.println(yy);
-            int z = xx+yy;
-            System.out.println(z);
+            int z = getDistance(locationDto, restaurant);;
             if (z<4){
                 showRestaurants.add(restaurant);
             }
-            System.out.println(showRestaurants);
         }
         return showRestaurants;
 
+    }
+
+    public static int getDistance(LocationDto locationDto, Restaurant restaurant) {
+        int x = restaurant.getX();
+        int y = restaurant.getY();
+        int userX = locationDto.getX();
+        int userY = locationDto.getY();
+        int xx = x-userX;
+        int yy = y-userY;
+        if (xx<0){
+            xx *= -1;
+        }
+        if (yy<0){
+            yy *= -1;
+        }
+        return xx+yy;
     }
 }

@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface OrderFoodsRepository extends JpaRepository<OrderFoods,Long> {
     List<OrderFoods> findOlderFoodsByOrders(Orders orders);
-//    List<OrderFoods> findOrderFoodsByOrder(Order order);
 }
 
 

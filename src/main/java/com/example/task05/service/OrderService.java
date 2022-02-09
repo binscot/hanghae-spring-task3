@@ -27,25 +27,26 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
 
-
-
-    public OrderService(RestaurantRepository restaurantRepository, FoodRepository foodRepository, OrderFoodsRepository orderFoodsRepository, OrderRepository orderRepository) {
+    public OrderService(
+            RestaurantRepository restaurantRepository,
+            FoodRepository foodRepository,
+            OrderFoodsRepository orderFoodsRepository,
+            OrderRepository orderRepository
+    ) {
         this.restaurantRepository = restaurantRepository;
         this.foodRepository = foodRepository;
         this.orderFoodsRepository = orderFoodsRepository;
         this.orderRepository = orderRepository;
-
     }
 
-
     //주문
-    //받는정보 : 음식점id,음식id,음식주문수량
+    //받는정보 : 음식점id, 음식id,음식주문수량
     //보여줄 정보 :
               // 음식점 이름
-              //주문 음식이름,
-              //음식수량, 주문음식가격,
+              // 주문 음식이름,
+              // 음식수량, 주문음식가격,
               // 배달비,
-              //최종 결제금액
+              // 최종 결제금액
    @Transactional
     public OrdersResponseDto createOrder(OrderRequestDto orderRequestDtoList) {
         //음식점 이름
@@ -53,13 +54,13 @@ public class OrderService {
                 .orElseThrow(
                         () -> new NullPointerException("해당 음식점이 없습니다.")
                 );
-        //고객에게 보여줄 주문음식이름,음식수량,음식가격을 담아줄 리스트
+        // 고객에게 보여줄 주문음식이름,음식수량,음식가격을 담아줄 리스트
         List<OrderFoodsResponseDto> orderFoodsResponseDtoList = new ArrayList<>();
-        //테이블에 저장할 주문음식,음식수량,주문정보를 담아줄 리스트
+        // 테이블에 저장할 주문음식,음식수량,주문정보를 담아줄 리스트
         List<OrderFoods> orderFoodsList =new ArrayList<>();
-        //배달비까지 포함한 총 금액을 담아줄 변수
+        // 배달비까지 포함한 총 금액을 담아줄 변수
         int totalPrice =0;
-        //주문정보에서 음식정보들을 하나씩 빼내서리스트에 담아줌
+        // 주문정보에서 음식정보들을 하나씩 빼내서리스트에 담아줌
         for (OrderFoods orderRequestDto: orderRequestDtoList.getFoods()){
             //음식 수량을빼냄
             int quantity = orderRequestDto.getQuantity();
@@ -67,37 +68,37 @@ public class OrderService {
             if (quantity < 0 || 100 < quantity){
                 throw new IllegalArgumentException("음식은 1개이상 100개 이하로 주문 할 수 있습니다.");
             }
-            //주문정보에서 음식id를 받아 food로 음식정보를 찾음
+            // 주문정보에서 음식id를 받아 food로 음식정보를 찾음
             Food food = foodRepository.findById(orderRequestDto.getId())
                     .orElseThrow(() -> new NullPointerException("해당 음식이 없습니다."));
-            //주문음식 테이블에 음식id로찾음 음식정보와 주문음식 갯수를 받아 저장
+            // 주문음식 테이블에 음식id로찾음 음식정보와 주문음식 갯수를 받아 저장
             OrderFoods orderFoods = new OrderFoods(food,quantity);
             orderFoodsRepository.save(orderFoods);
-            //주문 음식 리스트에 음식정보와 주문음식 갯수를 넣어줌
+            // 주문 음식 리스트에 음식정보와 주문음식 갯수를 넣어줌
             orderFoodsList.add(orderFoods);
 
-            //총 음식가격을 계산
+            // 총 음식가격을 계산
             totalPrice+=food.getPrice()*quantity;
 
-            //음식정보를 보여줄 리스트를 만들어 저장해준 리스트에서 음식이름,수량,가격을 리스트에 넣어줌
+            // 음식정보를 보여줄 리스트를 만들어 저장해준 리스트에서 음식이름,수량,가격을 리스트에 넣어줌
             OrderFoodsResponseDto orderFoodsResponseDto = new OrderFoodsResponseDto(
                     orderFoods.getFood().getName(),
                     quantity,
                     orderFoods.getFood().getPrice()*quantity);
 
-            //하나씩넣어준 리스트를 주문한 모든음식정보가 있는 리스트에 넣어줌
+            // 하나씩넣어준 리스트를 주문한 모든음식정보가 있는 리스트에 넣어줌
             orderFoodsResponseDtoList.add(orderFoodsResponseDto);
         }
-        //총 주문금액이 음식점 최소주문 가격보다 작은지 확인
+        // 총 주문금액이 음식점 최소주문 가격보다 작은지 확인
         if (totalPrice<restaurant.getMinOrderPrice()){
             throw new IllegalArgumentException("최소주문금액 이상 주문해주세요!");
         }
-        //음식점의 배달비를 뺴냄
+        // 음식점의 배달비를 뺴냄
         int deliveryFee = restaurant.getDeliveryFee();
         deliveryFee += deliveryFeePolicy(orderRequestDtoList.getLocationDto(),restaurant);
-        //총가격에 배달비를 더해줌
+        // 총가격에 배달비를 더해줌
         totalPrice+=deliveryFee;
-        //주문을 저장해줌
+        // 주문을 저장해줌
         Orders orders = new Orders(
                 restaurant.getName(),
                 orderFoodsList,totalPrice,
@@ -105,7 +106,7 @@ public class OrderService {
         );
         orderRepository.save(orders);
 
-        //고객에게 주문정보를 보여줌
+        // 고객에게 주문정보를 보여줌
         return new OrdersResponseDto(
                 orders,
                 orderFoodsResponseDtoList,
@@ -116,21 +117,21 @@ public class OrderService {
 
     @Transactional
     public  List<OrdersResponseDto> showOrders(){
-        //고객에게 보여줄 주문정보들의 리스트
+        // 고객에게 보여줄 주문정보들의 리스트
         List<OrdersResponseDto> orderFoodsResponseDtoList =new ArrayList<>();
-        //보여줄 주문정보중 음식정보를 담을 리스트
+        // 보여줄 주문정보중 음식정보를 담을 리스트
         List<OrderFoodsResponseDto> ordersResponse = new ArrayList<>();
-        //주문 테이블을 리스트로 만들어 찾음
+        // 주문 테이블을 리스트로 만들어 찾음
         List<Orders> ordersList = orderRepository.findAll();
-        //주문정보에서 정보를 하나씩 뺴냄
+        // 주문정보에서 정보를 하나씩 뺴냄
         for (Orders orders:ordersList){
-            //배달비를 빼냄
+            // 배달비를 빼냄
             int deliveryFee = orders.getDeliveryFee();
-            //주문정보중에 음식정보를 빼냄
+            // 주문정보중에 음식정보를 빼냄
             List<OrderFoods> orderFoodsList  = orderFoodsRepository.findOlderFoodsByOrders(orders);
-            //빼낸 음식정보리스트에서 음식정보를 하나씩 빼냄
+            // 빼낸 음식정보리스트에서 음식정보를 하나씩 빼냄
             for (OrderFoods orderFoods:orderFoodsList){
-                //빼낸 음식정보를 보여줄 정보로 바꿈
+                // 빼낸 음식정보를 보여줄 정보로 바꿈
                 OrderFoodsResponseDto orderFoodsResponseDto = new OrderFoodsResponseDto(
                         orderFoods.getFood().getName(),
                         orderFoods.getQuantity(),
@@ -147,31 +148,13 @@ public class OrderService {
         return orderFoodsResponseDtoList;
     }
 
-    //배달비할증
+    //배달비 할증
+    @Transactional
     public int deliveryFeePolicy(LocationDto locationDto, Restaurant restaurant){
-        System.out.println("고객위치 x"+locationDto.getX());
-        System.out.println("고객위치 y"+ locationDto.getY());
-        System.out.println("레스토랑 x:"+restaurant.getX());
-        System.out.println("레스토랑 y:"+restaurant.getY());
         int deliveryFeePolicy = 0;
-        int x = restaurant.getX();
-        int y = restaurant.getY();
-        int userX = locationDto.getX();
-        int userY = locationDto.getY();
-
-        int distanceX = x-userX;
-        int distanceY = y-userY;
-
-        if (distanceX<0){
-            distanceX *= -1;
-        }
-        if (distanceY<0){
-            distanceY *= -1;
-        }
-        int distanceXY = distanceX+distanceY;
-
+        int distanceXY = RestaurantService.getDistance(locationDto, restaurant);
         if (distanceXY>3){
-            throw new IllegalArgumentException("해당음식점은 거리가 멀어 주문하실 수 없습니다!!");
+            throw new IllegalArgumentException("해당음식점은 거리가 멀어 주문할 수 없습니다!!");
         } else {
             deliveryFeePolicy = distanceXY * 500;
         }

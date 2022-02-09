@@ -26,11 +26,9 @@ public class Food {
     @JoinColumn(name = "RESTAURANT_ID",nullable = false)
     private Restaurant restaurant;
 
-
     public Food(FoodRequestDto requestDto, Restaurant restaurant){
         this.name = requestDto.getName();
         this.price = requestDto.getPrice();
         this.restaurant = restaurant;
     }
-
 }

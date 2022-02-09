@@ -16,7 +16,10 @@ public class FoodService {
     private final FoodRepository foodRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public FoodService(FoodRepository foodRepository, RestaurantRepository restaurantRepository) {
+    public FoodService(
+            FoodRepository foodRepository,
+            RestaurantRepository restaurantRepository
+    ) {
         this.foodRepository = foodRepository;
         this.restaurantRepository = restaurantRepository;
     }
@@ -40,9 +43,6 @@ public class FoodService {
                 Food food = new Food(requestDto,restaurant);
                 foodRepository.save(food);
             }
-
         }
-
-
     }
 }

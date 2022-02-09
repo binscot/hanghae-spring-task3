@@ -15,11 +15,9 @@ import java.util.List;
 @RestController
 public class RestaurantController {
 
-    private final RestaurantRepository restaurantRepository;
     private final RestaurantService restaurantService;
 
-    public RestaurantController(RestaurantRepository restaurantRepository, RestaurantService restaurantService) {
-        this.restaurantRepository = restaurantRepository;
+    public RestaurantController(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
 
@@ -30,7 +28,6 @@ public class RestaurantController {
 
     @GetMapping("/restaurants")
     public List<Restaurant> getRestaurant(@RequestBody LocationDto locationDto) {
-        List<Restaurant> restaurants = restaurantService.showRestaurant(locationDto);
-        return restaurants;
+        return restaurantService.showRestaurant(locationDto);
     }
 }

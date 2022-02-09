@@ -3,7 +3,6 @@ package com.example.task05.controller;
 import com.example.task05.dto.LocationDto;
 import com.example.task05.dto.RestaurantRequestDto;
 import com.example.task05.model.Restaurant;
-import com.example.task05.repository.RestaurantRepository;
 import com.example.task05.service.RestaurantService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

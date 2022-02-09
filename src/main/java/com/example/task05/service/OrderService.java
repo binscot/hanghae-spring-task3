@@ -42,12 +42,12 @@ public class OrderService {
     //주문
     //받는정보 : 음식점id, 음식id,음식주문수량
     //보여줄 정보 :
-              // 음식점 이름
-              // 주문 음식이름,
-              // 음식수량, 주문음식가격,
-              // 배달비,
-              // 최종 결제금액
-   @Transactional
+    // 음식점 이름
+    // 주문 음식이름,
+    // 음식수량, 주문음식가격,
+    // 배달비,
+    // 최종 결제금액
+    @Transactional
     public OrdersResponseDto createOrder(OrderRequestDto orderRequestDtoList) {
         //음식점 이름
         Restaurant restaurant = restaurantRepository.findById(orderRequestDtoList.getRestaurantId())

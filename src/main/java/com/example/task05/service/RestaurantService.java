@@ -53,6 +53,8 @@ public class RestaurantService {
             int z = getDistance(locationDto, restaurant);;
             if (z<4){
                 showRestaurants.add(restaurant);
+            } else {
+                throw new IllegalArgumentException("해당위치에 배달할수있는 음식점이 없습니다.");
             }
         }
         return showRestaurants;
@@ -60,6 +62,9 @@ public class RestaurantService {
     }
 
     public static int getDistance(LocationDto locationDto, Restaurant restaurant) {
+        if (locationDto==null){
+            throw new NullPointerException("위치정보를 입력해주세요!");
+        }
         int x = restaurant.getX();
         int y = restaurant.getY();
         int userX = locationDto.getX();

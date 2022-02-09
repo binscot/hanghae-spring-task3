@@ -8,4 +8,5 @@ import lombok.Setter;
 public class LocationDto {
     private int x;
     private int y;
+
 }

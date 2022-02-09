@@ -30,4 +30,3 @@ public class FoodController {
     public List<Food> getFood(@PathVariable Long restaurantId) {return foodRepository.findByRestaurant_Id(restaurantId);}
 
 }
-

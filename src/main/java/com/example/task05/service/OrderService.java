@@ -95,7 +95,10 @@ public class OrderService {
         }
         // 음식점의 배달비를 뺴냄
         int deliveryFee = restaurant.getDeliveryFee();
-        deliveryFee += deliveryFeePolicy(orderRequestDtoList.getLocationDto(),restaurant);
+        int distanceFee = 0;
+        if (orderRequestDtoList.getLocationDto()!= null)
+            distanceFee = deliveryFeePolicy(orderRequestDtoList.getLocationDto(),restaurant);
+        deliveryFee += distanceFee;
         // 총가격에 배달비를 더해줌
         totalPrice+=deliveryFee;
         // 주문을 저장해줌
@@ -129,6 +132,7 @@ public class OrderService {
             int deliveryFee = orders.getDeliveryFee();
             // 주문정보중에 음식정보를 빼냄
             List<OrderFoods> orderFoodsList  = orderFoodsRepository.findOlderFoodsByOrders(orders);
+            System.out.println("음식정보:"+orderFoodsList);
             // 빼낸 음식정보리스트에서 음식정보를 하나씩 빼냄
             for (OrderFoods orderFoods:orderFoodsList){
                 // 빼낸 음식정보를 보여줄 정보로 바꿈
@@ -138,6 +142,7 @@ public class OrderService {
                         orderFoods.getFood().getPrice()*orderFoods.getQuantity());
                 //보여줄 정보로 바꾼 음식 하나씩 보여줄 리스트에 넣어줌
                 ordersResponse.add(orderFoodsResponseDto);
+                System.out.println(orderFoodsResponseDto);
             }
             //주문 정보를 하나씩 만들어줌
             OrdersResponseDto ordersResponseDto =  new OrdersResponseDto(orders,ordersResponse,deliveryFee);

@@ -22,7 +22,7 @@ public class Orders {
     private String restaurantName;
 
     @OneToMany
-    @JoinColumn(name = "ORDER_ID")
+    @JoinColumn(name = "ORDERS_ID")
     private List<OrderFoods> orderFoods;
 
     @Column(nullable = false)

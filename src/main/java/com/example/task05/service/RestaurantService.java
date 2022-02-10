@@ -48,13 +48,13 @@ public class RestaurantService {
         //보여줄 레스토랑 리스트
         List<Restaurant> showRestaurants = new ArrayList<>();
         //거리를 비교해줄 레스토랑 리스트
+
         List<Restaurant> restaurantList = restaurantRepository.findAll();
+
         for (Restaurant restaurant : restaurantList){
             int z = getDistance(locationDto, restaurant);;
             if (z<4){
                 showRestaurants.add(restaurant);
-            } else {
-                throw new IllegalArgumentException("해당위치에 배달할수있는 음식점이 없습니다.");
             }
         }
         return showRestaurants;

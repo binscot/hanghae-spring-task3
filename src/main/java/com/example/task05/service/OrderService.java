@@ -105,7 +105,8 @@ public class OrderService {
         Orders orders = new Orders(
                 restaurant.getName(),
                 orderFoodsList,totalPrice,
-                restaurant.getDeliveryFee()
+                deliveryFee
+//                restaurant.getDeliveryFee()
         );
         orderRepository.save(orders);
 

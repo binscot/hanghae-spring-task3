@@ -4,10 +4,7 @@ import com.example.task05.dto.LocationDto;
 import com.example.task05.dto.RestaurantRequestDto;
 import com.example.task05.model.Restaurant;
 import com.example.task05.service.RestaurantService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants")
-    public List<Restaurant> getRestaurant(LocationDto locationDto) {
+    public List<Restaurant> getRestaurant( LocationDto locationDto) {
         return restaurantService.showRestaurant(locationDto);
     }
 }
